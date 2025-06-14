@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Direct Video Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        video {
+            max-width: 100%;
+            max-height: 100vh;
+        }
+        button {
+            position: fixed;
+            bottom: 20px;
+            padding: 10px 20px;
+            background: purple;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <video id="myVideo" controls>
+        <source src="video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <button id="playBtn">Play Video</button>
+
+    <script>
+        document.getElementById('playBtn').addEventListener('click', function() {
+            const video = document.getElementById('myVideo');
+            video.play();
+        });
+    </script>
+</body>
+</html>

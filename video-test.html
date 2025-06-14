@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: purple;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="bg-video" loop>
+            <source src="video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    
+    <div class="controls">
+        <button id="play-btn">Play Video</button>
+        <button id="play-with-audio-btn">Play With Audio</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('bg-video');
+            const playBtn = document.getElementById('play-btn');
+            const playWithAudioBtn = document.getElementById('play-with-audio-btn');
+            
+            playBtn.addEventListener('click', () => {
+                video.muted = true;
+                video.play();
+                console.log('Playing muted video');
+            });
+            
+            playWithAudioBtn.addEventListener('click', () => {
+                video.muted = false;
+                video.volume = 0.5;
+                video.play();
+                console.log('Playing video with audio');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "mac-address-logger",
+  "version": "1.0.0",
+  "description": "A tool for logging MAC addresses of devices and routers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "arp-a": "^0.5.2",
+    "default-gateway": "^6.0.3",
+    "express": "^4.21.2",
+    "network": "^0.6.1",
+    "node-fetch": "^2.6.7",
+    "node-machine-id": "^1.1.12",
+    "portscanner": "^2.2.0"
+  }
+}

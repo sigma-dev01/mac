@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@x_mmo</title>
+    <link rel="icon" type="image/x-icon" href="https://xlinix.xyz/hi_55.cur">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="security-notice">
+        <p><i class="fas fa-shield-alt"></i> Click the bomb to visit the Site!</p>
+    </div>
+
+    <div id="interact-btn" class="interact-btn">
+        <i class="fa-solid fa-bomb"></i>
+    </div>
+
+    <div id="video-container">
+        <video id="bg-video" class="bg-media" loop muted>
+            <source src="https://xlinix.xyz/video.mp4" type="video/mp4">
+        </video>
+        <audio id="bg-audio" class="bg-media" loop>
+            <source id="audio-source" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- MAC Address Logger Content -->
+    <div id="logger-content" class="logger-content">
+        <div class="container">
+            <h1>MAC Address Logger</h1>
+            
+            <div class="button-container">
+                <button id="scanBtn" class="btn primary">Scan Network</button>
+                <button id="viewLogsBtn" class="btn secondary">View Previous Logs</button>
+            </div>
+            
+            <div class="webhook-info">
+                <p><span class="webhook-icon">🔄</span> Results will be sent to Discord webhook automatically</p>
+            </div>
+            
+            <div id="status" class="status">Ready to scan network interfaces and router information.</div>
+            
+            <div class="card">
+                <h2>System Information</h2>
+                <div id="systemInfo" class="system-info">
+                    <p>No system information detected yet. Click "Scan Network" to begin.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Device Network Interfaces</h2>
+                <div id="interfaceList" class="interface-list">
+                    <p>No interfaces detected yet. Click "Scan Network" to begin.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Router Information</h2>
+                <div id="routerInfo" class="router-info">
+                    <p>No router detected yet. Click "Scan Network" to begin.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Port Scan Results</h2>
+                <div id="portScanResults" class="port-scan-results">
+                    <p>No port scan results yet. Click "Scan Network" to begin.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Log History</h2>
+                <div id="logHistory" class="log-history">
+                    <p>No logs yet. Click "Scan Network" to begin.</p>
+                </div>
+                <button id="downloadBtn" class="btn download" disabled>Download Current Log</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Info Panel -->
+    <div id="user-info" class="user-info">
+        <img src="xim.png" alt="Profile" class="avatar">
+        <h2 class="display-name">x_mmo</h2>
+        <div class="social-links">
+            <a href="https://discord.gg/drogen" class="social-btn" id="discord-link"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://www.youtube.com/ximTM" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://ws1.trivox.sh/webmail/" class="social-btn"><i class="fa-solid fa-envelope"></i></a>
+            <a href="https://goodz.wtf/" class="button shop" target="_blank">
+                <i class="fas fa-shopping-cart"></i> Shop
+            </a>
+            <a href="https://goodz.instatus.com" class="button status" target="_blank">
+                <i class="fas fa-signal"></i> Status
+            </a>
+        </div>
+        <input type="range" id="audio-control" class="audio-control" min="0" max="1" step="0.01" value="0.5">
+        <button id="support-btn" class="support-btn">Donate</button>
+    </div>
+
+    <!-- Donation Dialog -->
+    <div id="dialog-overlay" class="dialog-overlay">
+        <div class="dialog-box">
+            <button class="close" id="close-dialog">&times;</button>
+            <p>LTC: LckhoGgdT2sYkGbe6jH3tbdHfaRsLXADuh</p>
+        </div>
+    </div>
+    
+    <!-- Logs Modal -->
+    <div id="logsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-logs">&times;</span>
+            <h2>Previous Logs</h2>
+            <div id="logsList"></div>
+            <div id="log-details">
+                <pre id="logContent"></pre>
+            </div>
+        </div>
+    </div>
+    
+    <script src="macLogger.js"></script>
+    <script>
+        const songs = [
+            'https://r2-bios.e-z.host/ad9dfb47-ba82-4e95-bdda-79e8f50afae6/8l8w07qb4y.mp3',
+            'https://r2-bios.e-z.host/ad9dfb47-ba82-4e95-bdda-79e8f50afae6/o3vtl1mgj7.mp3',
+            'https://r2-bios.e-z.host/ad9dfb47-ba82-4e95-bdda-79e8f50afae6/8l8w07qb4y.mp3'
+        ];
+
+        // Function to get a random song
+        function getRandomSong() {
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            return songs[randomIndex];
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('interact-btn');
+            const info = document.getElementById('user-info');
+            const loggerContent = document.getElementById('logger-content');
+            const audioControl = document.getElementById('audio-control');
+            const support = document.getElementById('support-btn');
+            const dialog = document.getElementById('dialog-overlay');
+            const close = document.getElementById('close-dialog');
+            const videoContainer = document.getElementById('video-container');
+            const securityNotice = document.querySelector('.security-notice');
+            const closeLogsBtn = document.getElementById('close-logs');
+
+            document.addEventListener('mousemove', (e) => {
+                // Cursor particles
+                for (let i = 0; i < 3; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'cursor-particle';
+                    particle.style.left = e.clientX + 'px';
+                    particle.style.top = e.clientY + 'px';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const velocity = Math.random() * 50 + 30;
+                    particle.style.setProperty('--tx', `${Math.cos(angle) * velocity}px`);
+                    particle.style.setProperty('--ty', `${Math.sin(angle) * velocity}px`);
+                    
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 1000);
+                }
+            });
+
+            const createRain = () => {
+                const count = Math.min(window.innerWidth < 768 ? 50 : 100);
+                
+                for(let i = 0; i < count; i++) {
+                    const drop = document.createElement('div');
+                    drop.className = 'rain-drop';
+                    drop.style.left = `${Math.random() * 100}vw`;
+                    drop.style.opacity = Math.random() * 0.3 + 0.2;
+                    drop.style.animationDuration = `${Math.random() * (2 - 0.5) + 0.5}s`;
+                    document.body.appendChild(drop);
+
+                    drop.addEventListener('animationend', () => {
+                        drop.remove();
+                        createRain();
+                    });
+                }
+            }
+
+            createRain();
+
+            btn.addEventListener('click', () => {
+                btn.style.display = 'none';
+                securityNotice.classList.add('hidden');
+                
+                // Get the existing video and audio elements
+                const video = document.getElementById('bg-video');
+                const audio = document.getElementById('bg-audio');
+                const audioSource = document.getElementById('audio-source');
+                
+                // Set random song
+                audioSource.src = getRandomSong();
+                audio.load(); // Reload audio with new source
+                
+                // Make video visible and ensure it's muted
+                video.style.opacity = '1';
+                video.muted = true;
+                
+                // Set volume for audio only (video is muted)
+                audio.volume = parseFloat(audioControl.value) || 0.5;
+                
+                // Play both video and audio
+                Promise.all([
+                    video.play(),
+                    audio.play()
+                ]).then(() => {
+                    console.log('Video (muted) and audio are playing');
+                }).catch(error => {
+                    console.error('Error playing media:', error);
+                });
+
+                // Add event listener for when song ends to play next random song
+                audio.addEventListener('ended', () => {
+                    audioSource.src = getRandomSong();
+                    audio.load();
+                    audio.play();
+                });
+
+                setTimeout(() => {
+                    info.classList.add('visible');
+                    support.style.display = 'block';
+                    setTimeout(() => {
+                        loggerContent.classList.add('visible');
+                    }, 1000);
+                }, 200);
+
+                audioControl.addEventListener('input', (e) => {
+                    // Only control audio volume since video is muted
+                    audio.volume = e.target.value;
+                });
+            });
+
+            support.addEventListener('click', () => {
+                dialog.style.display = 'flex';
+                // Trigger reflow to ensure transition works
+                dialog.offsetHeight;
+                dialog.classList.add('show');
+            });
+
+            close.addEventListener('click', () => {
+                dialog.classList.remove('show');
+                setTimeout(() => {
+                    dialog.style.display = 'none';
+                }, 300);
+            });
+
+            // Logger button removed - content now shows automatically
+
+            if (!('ontouchstart' in window)) {
+                document.addEventListener('mousemove', (e) => {
+                    const x = e.clientX;
+                    const y = e.clientY;
+                    const card = document.querySelector('.user-info');
+                    const cx = window.innerWidth / 2;
+                    const cy = window.innerHeight / 2;
+
+                    const dx = (x - cx) / 30;
+                    const dy = (y - cy) / 30;
+
+                    if (card.classList.contains('visible')) {
+                        card.style.transform = `translate(-50%, -50%) perspective(1000px) rotateX(${-dy}deg) rotateY(${dx}deg)`;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
